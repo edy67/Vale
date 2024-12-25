@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carta Navideña</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to bottom, #87CEEB, #4682B4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Efecto de nieve */
+        @keyframes snow {
+            0% {
+                transform: translateY(-50px);
+            }
+
+            100% {
+                transform: translateY(100vh);
+            }
+        }
+
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            color: white;
+            font-size: 24px;
+            z-index: 999;
+            animation: snow 10s linear infinite;
+        }
+
+        .snowflake:nth-child(odd) {
+            animation-duration: 8s;
+        }
+
+        .snowflake:nth-child(even) {
+            animation-duration: 12s;
+        }
+
+        .snowflake:nth-child(1) {
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .snowflake:nth-child(2) {
+            left: 30%;
+            animation-delay: 1s;
+        }
+
+        .snowflake:nth-child(3) {
+            left: 50%;
+            animation-delay: 2s;
+        }
+
+        .snowflake:nth-child(4) {
+            left: 70%;
+            animation-delay: 3s;
+        }
+
+        .snowflake:nth-child(5) {
+            left: 90%;
+            animation-delay: 4s;
+        }
+
+        /* Caja del sobre */
+        .envelope {
+            position: relative;
+            width: 350px;
+            height: 200px;
+            background: #fff7d6;
+            border-radius: 15px;
+            border: 2px solid #f0c987;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #ffdfbb;
+        }
+
+        /* Solapa del sobre */
+        .flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: #ff6363;
+            border-bottom: 2px solid #f0c987;
+            border-radius: 15px 15px 0 0;
+            transform-origin: top center;
+            transition: transform 1s ease;
+        }
+
+        /* Sello del sobre */
+        .seal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 50px;
+            height: 50px;
+            background: #ff6f91;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .seal::after {
+            content: '🎅';
+        }
+
+        /* Indicaciones */
+        .indicator {
+            position: absolute;
+            top: 65%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 18px;
+            color: white;
+            font-weight: bold;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .indicator:before {
+            content: '¡Haz clic en el ícono 🎅 para abrir!';
+            display: block;
+            margin-top: 10px;
+            font-size: 12px;
+            color: black;
+        }
+
+        /* Input oculto para abrir la carta */
+        input[type="checkbox"] {
+            display: none;
+        }
+
+        /* Modal (Carta) */
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 500px;
+            height: 500px;
+            padding: 20px;
+            background: #fff3e0;
+            border: 3px solid #f2b5d4;
+            border-radius: 15px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+            transition: transform 1s ease, opacity 1s ease;
+            z-index: 3;
+            display: none;
+        }
+
+        input[type="checkbox"]:checked~.envelope .flap {
+            transform: rotateX(-180deg);
+        }
+
+        input[type="checkbox"]:checked~.envelope .seal {
+            display: none;
+        }
+
+        input[type="checkbox"]:checked~.modal {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+            display: block;
+        }
+
+        .modal .message {
+            font-size: 18px;
+            color: #804d2b;
+            text-align: center;
+            margin-bottom: 20px;
+            margin-top: 30px;
+        }
+
+        .modal .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            background: #ff6f91;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal .close-button:hover {
+            background: #e65175;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Nieve -->
+    <div class="snowflake">❄️</div>
+    <div class="snowflake">❄️</div>
+    <div class="snowflake">❄️</div>
+    <div class="snowflake">❄️</div>
+    <div class="snowflake">❄️</div>
+
+    <input type="checkbox" id="openEnvelope">
+    <label for="openEnvelope">
+        <div class="envelope">
+            <div class="flap"></div>
+            <div class="seal"></div>
+            <div class="indicator"></div>
+        </div>
+    </label>
+
+    <!-- Modal (Carta) -->
+    <div class="modal">
+        <div class="message">
+            En esta Navidad 🎄, quiero agradecerles por ser esas personas que hacen que la universidad sea más soportable 🌟. Vale, cada momento que hemos compartido, desde sobrevivir clases interminables hasta hacer memes del profe, es un regalo 🎁 que atesoro (aunque a veces prefiera olvidar ciertos exámenes).
+
+            Que esta temporada de fiestas esté llena de risas 😂, paz ✨ y días libres para recuperar sueño 🎉. Que el espíritu navideño 🌟 les traiga magia, un 7 en todo (con redondeo incluido 🎅) y cero filas en el comedor universitario.
+            
+            Gracias por estar ahí siempre, incluso cuando todo se va al caos en los trabajos en grupo. Por ser grandes amigos/as y expertos en procrastinar conmigo (maestros del “lo hacemos mañana”). ¡Les deseo lo mejor en estas fiestas, muchos abrazos y cero tareas finales! 🎆
+            
+            P.D.: Si el 2025 nos sorprende, ojalá sea con café gratis y clases después de las 10 a. m. 😂
+            <br>
+            Que la paz de Cristo reine en tu corazón y su luz guíe cada uno de tus pasos. 'El Señor te bendiga y te guarde; el Señor haga resplandecer su rostro sobre ti, y tenga de ti misericordia; el Señor alce sobre ti su rostro, y ponga en ti paz.' (Números 6:24-26)
+        </div>
+    </div>
+</body>
+
+</html>
